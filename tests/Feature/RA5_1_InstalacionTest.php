@@ -76,6 +76,6 @@ class RA5_1_InstalacionTest extends TestCase
 
         $this->assertSame(200, $respuesta->status(), 'http://eportfolio.test no responde 200: revisa el sitio de nginx y los permisos (--user=laradock).');
         // La cookie de sesión de Laravel se llama <app>-session (APP_NAME en minúsculas); la de PHP plano, PHPSESSID.
-        $this->assertStringContainsString('-session=', $cookies, 'Quien responde no es Laravel: revisa server_name y root en eportfolio_g3.conf.');
+        $this->assertStringContainsString('-session=', $cookies, 'Quien responde no es Laravel: revisa server_name y root en eportfolio.conf.');
     }
 }
