@@ -74,8 +74,8 @@ class RA5_1_InstalacionTest extends TestCase
         $respuesta = Http::withHeaders(['Host' => self::SITIO])->get(self::NGINX);
         $cookies   = implode("\n", $respuesta->toPsrResponse()->getHeader('Set-Cookie'));
 
-        $this->assertSame(200, $respuesta->status(), 'http://marcapersonalfp.test no responde 200: revisa el sitio de nginx y los permisos (--user=laradock).');
+        $this->assertSame(200, $respuesta->status(), 'http://eportfolio.test no responde 200: revisa el sitio de nginx y los permisos (--user=laradock).');
         // La cookie de sesión de Laravel se llama <app>-session (APP_NAME en minúsculas); la de PHP plano, PHPSESSID.
-        $this->assertStringContainsString('-session=', $cookies, 'Quien responde no es Laravel: revisa server_name y root en marcapersonalfp.conf.');
+        $this->assertStringContainsString('-session=', $cookies, 'Quien responde no es Laravel: revisa server_name y root en eportfolio.conf.');
     }
 }
