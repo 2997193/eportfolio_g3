@@ -33,4 +33,6 @@ Route::get('perfil/{id?}', function ($id = null){
         'centro' => config('eportfolio.centro')];
  })->name('acerca');
 
-
+Route::get('/pruebas', function () {
+    return view('pruebas');
+});

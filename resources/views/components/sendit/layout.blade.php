@@ -1,4 +1,10 @@
-@props(['titulo' => null])
+@props([
+    'titulo' => null,
+    'titulo0' => 'Home',
+    'titulo1' => 'Features',
+    'titulo2' => 'Pricing',
+    'titulo3' => 'Blog',
+])
 <!DOCTYPE html>
 <html lang="es">
 
@@ -23,7 +29,7 @@
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
-    <x-sendit.header />
+    <x-sendit.header :titulo0="$titulo0" :titulo1="$titulo1" :titulo2="$titulo2" :titulo3="$titulo3"/>
     <x-sendit.main>
         {{ $slot }}
     </x-sendit.main>
