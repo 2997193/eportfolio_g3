@@ -1,3 +1,7 @@
 <x-layout>
-    <p>{{ isset($id) ? 'Perfil del usuario ' . $id : 'Mi perfil' }}</p>
+    @isset($id)
+        <p>Perfil del usuario {{ $id }}</p>
+    @else
+        <p>Mi perfil</p>
+    @endisset
 </x-layout>

@@ -1,8 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PerfilController;
 
-Route::view('/', 'home');
+Route::get('/', HomeController::class);
 
 Route::prefix('evidencias')->name('evidencias.')->group(function(){
     Route::get('/', function () { 
@@ -22,10 +24,8 @@ Route::prefix('evidencias')->name('evidencias.')->group(function(){
         })->name('edit')->whereNumber('id');
 });
 
-Route::get('perfil/{id?}', function ($id = null){
-    return view('perfil', ['id' => $id]);
- })->whereNumber('id')->name('perfil');
 
+Route::get('/perfil/{id?}', PerfilController::class)->name('perfil')->whereNumber('id');
 
  Route::get('/acerca', function (){
      return [
