@@ -1,3 +1,6 @@
+@props([
+    'texto' => null,
+])
 <x-layout>
-    <p>hola</p>
+    <p>{{ $texto }}</p>
 </x-layout>

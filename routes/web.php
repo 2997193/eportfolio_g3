@@ -6,24 +6,24 @@ Route::view('/', 'home');
 
 Route::prefix('evidencias')->name('evidencias.')->group(function(){
     Route::get('/', function () { 
-        return 'Listado de evidencias '; 
+        return view('home', ['title' => 'Listado de evidencias', 'texto' => 'Listado de evidencias']);
         })->name('index');
 
         Route::get('show/{id}', function ($id) { 
-        return 'Evidencia ' . $id; 
+        return view('home', ['title' => 'Detalle de evidencia', 'texto' => 'Evidencia ' . $id]);
         })->name('show')->whereNumber('id');
 
         Route::get('create', function () { 
-        return 'Nueva evidencia ';
+        return view('home', ['title' => 'Crear evidencia', 'texto' => 'Nueva evidencia']);
         })->name('create');
 
         Route::get('edit/{id}', function ($id) { 
-        return 'Modificar evidencia ' . $id; 
+        return view('home', ['title' => 'Editar evidencia', 'texto' => 'Modificar evidencia ' . $id]); 
         })->name('edit')->whereNumber('id');
 });
 
 Route::get('perfil/{id?}', function ($id = null){
-     return $id ? 'Perfil del usuario ' . $id : 'Mi perfil';
+    return view('home', ['texto' => $id ? 'Perfil del usuario ' . $id : 'Mi perfil']);
  })->whereNumber('id')->name('perfil');
 
 
