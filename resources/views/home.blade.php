@@ -1,6 +1,3 @@
-@props([
-    'texto' => null,
-])
 <x-layout>
-    <p>{{ $texto }}</p>
+    <p>Portada del ePortfolio</p>
 </x-layout>
