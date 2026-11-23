@@ -1,3 +1,3 @@
 <x-layout>
-    <p>Crear evidencia</p>
+    <p>Nueva evidencia</p>
 </x-layout>
