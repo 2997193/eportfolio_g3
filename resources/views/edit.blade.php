@@ -1,3 +1,3 @@
 <x-layout>
-    <p>Editar evidencia {{ $id }}</p>
+    <p>Modificar evidencia {{ $id }}</p>
 </x-layout>
