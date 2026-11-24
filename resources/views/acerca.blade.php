@@ -1,0 +1,1 @@
+<p> Centro: {{ $centro }}</p>
