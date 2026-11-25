@@ -6,6 +6,8 @@ use App\Http\Controllers\PerfilController;
 
 Route::get('/', HomeController::class);
 
+require __DIR__ . '/modulos-formativos.php';
+
 Route::prefix('evidencias')->name('evidencias.')->group(function(){
     Route::get('/', function () { 
         return view ('index');
