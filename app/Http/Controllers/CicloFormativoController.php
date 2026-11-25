@@ -1510,15 +1510,14 @@ class CicloFormativoController extends Controller
         )
     );
     public function index(){
-
+        return view('ciclos-formativos.index', ['ciclos' => $this->ciclosFormativos]);
     }
-    public function show(){
-
+    public function show($id){
+        return view('ciclos-formativos.show', ['ciclo' => $this->ciclosFormativos[$id]]);
     }
     public function create(){
-
     }
-    public function edit(){
+    public function edit($id){
 
     }
 }
