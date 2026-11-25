@@ -1513,11 +1513,14 @@ class CicloFormativoController extends Controller
         return view('ciclos-formativos.index', ['ciclos' => $this->ciclosFormativos]);
     }
     public function show($id){
-        return view('ciclos-formativos.show', ['ciclo' => $this->ciclosFormativos[$id]]);
+        abort_unless(isset($this->ciclosFormativos[$id]), 404);
+        return view('ciclos-formativos.show', ['ciclo' => $this->ciclosFormativos[$id], 'id' => $id]);
     }
     public function create(){
+        return view('ciclos-formativos.create');
     }
     public function edit($id){
-
+        abort_unless(isset($this->ciclosFormativos[$id]), 404);
+        return view('ciclos-formativos.edit', ['id' => $id]);
     }
 }
