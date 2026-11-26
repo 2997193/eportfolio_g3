@@ -1,9 +1,9 @@
 <x-layout>
     <div class="flex w-full flex-col">
-        <h1 class="mb-6 text-3xl font-bold">{{ $ciclo['nombre'] }}</h1>
+        <h1 class="mb-6 text-3xl font-bold">Detalles del ciclo formativo:</h1>
         <ul class="grid grid-cols-1 gap-6">
             <li>
-                <div class="bg-neutral-primary-soft block h-full rounded-base border border-default p-6 shadow-xs hover:bg-neutral-secondary-medium">
+                <div class="flex flex-col justify-between h-full p-8 bg-gray-50 rounded-3xl border-2 shadow-md hover:shadow-lg hover:bg-gray-100 transition-all duration-200">
                     <h5 class="mb-3 text-2xl font-semibold tracking-tight text-heading leading-8">
                         {{ $ciclo['nombre'] }}
                     </h5>
@@ -36,12 +36,12 @@
                             <dd class="mt-1 whitespace-pre-line text-body">{{ $ciclo['descripcion'] }}</dd>
                         </div>
                     </dl>
-                    <div class="mt-6 flex flex-wrap gap-3">
-                        <a href="{{ route('ciclos-formativos.index') }}" class="inline-flex items-center justify-center rounded-full border border-transparent bg-blue-600 px-4 py-2.5 text-sm font-medium leading-5 text-white shadow-xs hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
+                    <div class="mt-6 flex flex-wrap gap-3 ">
+                        <a href="{{ route('ciclos-formativos.index') }}" class="inline-flex items-center justify-center bg-[#cff245] px-4 py-2 text-black rounded-xl">
                             Volver al listado
                         </a>
                         {{--https://laravel.com/framework/docs/13.x/routing#required-parameters--}}
-                        <a href="{{ route('ciclos-formativos.edit', ['id' => $id]) }}" class="inline-flex items-center justify-center rounded-full border border-transparent bg-blue-600 px-4 py-2.5 text-sm font-medium leading-5 text-white shadow-xs hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
+                        <a href="{{ route('ciclos-formativos.edit', ['id' => $id]) }}" class="inline-flex items-center justify-center bg-[#cff245] px-4 py-2 text-black rounded-xl">
                             Editar
                         </a>
                     </div>                    

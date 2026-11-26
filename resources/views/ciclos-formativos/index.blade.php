@@ -7,7 +7,7 @@
            @foreach ($ciclos as $id => $ciclo)
                 <li>
                     {{--https://laravel.com/docs/13.x/routing#named-routes--}}
-                    <a href="{{ route('ciclos-formativos.show', ['id' => $id]) }}" class="bg-neutral-primary-soft block h-full rounded-base border border-default p-6 shadow-xs hover:bg-neutral-secondary-medium">
+                        <a href="{{ route('ciclos-formativos.show', ['id' => $id]) }}" class="flex flex-col justify-between h-full p-8 bg-gray-50 rounded-3xl border-2 shadow-md hover:shadow-lg hover:bg-gray-100 transition-all duration-200">
                         <h5 class="mb-3 text-2xl font-semibold tracking-tight text-heading leading-8">
                             {{ $ciclo['nombre'] }}
                         </h5>
