@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class ModuloFormativoController extends Controller
 {
@@ -36,7 +37,7 @@ class ModuloFormativoController extends Controller
         ]);
     }
 
-    public static $modulos_formativos = array(
+    private $modulosFormativos = array(
         // ==========================================
         // TÉCNICO SUPERIOR EN DESARROLLO DE APLICACIONES WEB (DAPW3)
         // ==========================================
