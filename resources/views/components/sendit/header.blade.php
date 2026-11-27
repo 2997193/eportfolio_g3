@@ -4,7 +4,7 @@
                 <i class="bi bi-send-fill text-xl text-[#cff245]"></i> <span>ePortfolio</span>
             </a>
             <nav class="hidden md:flex text-sm gap-8">
-                <a href="#" class="underline">{{ $titulo0 }}</a>
+                <a href="{{ route('evidencias.index') }}" class="hover:underline">Evidencias</a>
                 <a href="#" class="hover:underline">{{ $titulo1 }}</a>
                 <a href="#" class="hover:underline">{{ $titulo2 }}</a>
                 <a href="#" class="hover:underline">{{ $titulo3 }}</a>
