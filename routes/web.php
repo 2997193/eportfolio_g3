@@ -4,8 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PerfilController;
 
-
 Route::get('/', HomeController::class);
+
+require __DIR__ . '/modulos-formativos.php';
 
 require __DIR__ . '/evidencias.php';
 
