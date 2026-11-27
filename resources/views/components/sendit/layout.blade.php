@@ -1,3 +1,10 @@
+@props([
+    'titulo' => null,
+    'titulo0' => 'Home',
+    'titulo1' => 'Features',
+    'titulo2' => 'Pricing',
+    'titulo3' => 'Blog',
+])
 <!DOCTYPE html>
 <html lang="es">
 
