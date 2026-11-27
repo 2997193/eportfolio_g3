@@ -21,3 +21,4 @@ Route::get('/pruebas', function () {
     return view('pruebas');
 });
 
+require __DIR__.'/ciclos-formativos.php';
