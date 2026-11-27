@@ -6,24 +6,9 @@ use App\Http\Controllers\PerfilController;
 
 Route::get('/', HomeController::class);
 
-Route::prefix('evidencias')->name('evidencias.')->group(function(){
-    Route::get('/', function () { 
-        return view ('index');
-        })->name('index');
+require __DIR__ . '/modulos-formativos.php';
 
-        Route::get('show/{id}', function ($id) { 
-        return view('show', ['id' => $id]);
-        })->name('show')->whereNumber('id');
-
-        Route::get('create', function () { 
-        return view('create');
-        })->name('create');
-
-        Route::get('edit/{id}', function ($id) { 
-        return view('edit', ['id' => $id]);
-        })->name('edit')->whereNumber('id');
-});
-
+require __DIR__ . '/evidencias.php';
 
 Route::get('/perfil/{id?}', PerfilController::class)->name('perfil')->whereNumber('id');
 
@@ -37,3 +22,5 @@ Route::get('/pruebas', function () {
     return view('pruebas');
 });
 require __DIR__.'/familias-profesionales.php';
+
+require __DIR__.'/ciclos-formativos.php';
