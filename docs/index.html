@@ -1,0 +1,803 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Estilos ePortfolio G3</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script>
+  tailwind.config = { theme: { extend: { fontFamily: { sans: ['Instrument Sans', 'ui-sans-serif', 'system-ui', 'sans-serif'] } } } };
+</script>
+<style>
+  /* Layout: barra superior fija con 3 vistas (guía, cheat sheet, clases). Las muestras se pintan sobre
+     "escenarios" que imitan las superficies reales de la plantilla: negro de marca, gris claro y blanco.
+     Prefijo g- en todo el chrome de la página para no chocar con clases de Tailwind. */
+  :root {
+    --bg: #f6f7fa; --surface: #ffffff; --surface-2: #eceef3; --line: #dcdfe8;
+    --fg: #0d0e11; --muted: #555b6b;
+    --accent: #cff245; --accent-ink: #0d0e11; --link: #3d4d00; --focus: #0d0e11;
+    --code-bg: #0d0e11; --code-fg: #e4e6ec; --code-line: #262932; --code-btn: #1a1d25;
+    --syn-tag: #cff245; --syn-attr: #8fb0ff; --syn-str: #f0c27b; --syn-blade: #ff9fc2; --syn-com: #7a8092;
+    --site-ink: #0d0e11; --site-mist: #f6f7fa; --site-white: #ffffff;
+    --font: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0d0e11; --surface: #16181d; --surface-2: #1f222a; --line: #2a2e38;
+      --fg: #f2f3f6; --muted: #a0a6b6; --link: #cff245; --focus: #cff245;
+      --code-bg: #07080a; --code-line: #23262e; --code-btn: #171a21; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0d0e11; --surface: #16181d; --surface-2: #1f222a; --line: #2a2e38;
+    --fg: #f2f3f6; --muted: #a0a6b6; --link: #cff245; --focus: #cff245;
+    --code-bg: #07080a; --code-line: #23262e; --code-btn: #171a21; color-scheme: dark;
+  }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.55 var(--font); -webkit-font-smoothing: antialiased; }
+  body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--bg); }
+  a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+  .g-wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+  /* Barra superior */
+  .g-head { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--bg); border-bottom: 1px solid var(--line); }
+  .g-head-in { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 24px; padding-block: 12px; }
+  .g-brand { display: flex; align-items: center; gap: 10px; font-weight: 600; letter-spacing: -.01em; }
+  .g-brand em { font-style: normal; color: var(--muted); font-weight: 500; }
+  .g-mark { width: 22px; height: 22px; border-radius: 7px; background: var(--accent); box-shadow: inset 0 0 0 1px rgba(0,0,0,.18); }
+  .g-tabs { display: flex; gap: 4px; overflow-x: auto; max-width: 100%; }
+  .g-tab { padding: 7px 14px; border-radius: 10px; font-size: 14px; font-weight: 500; color: var(--muted); white-space: nowrap; }
+  .g-tab:hover { color: var(--fg); background: var(--surface-2); }
+  .g-tab[aria-current="page"] { background: var(--accent); color: var(--accent-ink); }
+
+  /* Cabecera de cada vista */
+  .g-intro { padding-block: 48px 28px; display: grid; gap: 14px; }
+  .g-intro h1 { font-size: clamp(2rem, 5.5vw, 3.3rem); line-height: 1.05; font-weight: 600; letter-spacing: -.04em; text-wrap: balance; margin: 0; }
+  .g-intro p { margin: 0; max-width: 64ch; color: var(--muted); font-size: 16px; }
+  .g-intro p a, .g-link { color: var(--link); text-decoration: underline; text-underline-offset: 3px; font-weight: 500; }
+
+  /* Secciones */
+  .g-sec { padding-block: 40px; border-top: 1px solid var(--line); }
+  .g-sec-h { margin-bottom: 24px; }
+  .g-sec-h h2 { margin: 0; font-size: 1.65rem; font-weight: 600; letter-spacing: -.03em; text-wrap: balance; }
+  .g-sec-h p { margin: 6px 0 0; color: var(--muted); max-width: 70ch; }
+  .g-sub { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 28px 0 12px; }
+  .g-sub:first-of-type { margin-top: 0; }
+
+  .g-rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 24px 32px; }
+  .g-rule { border-top: 2px solid var(--fg); padding-top: 12px; min-width: 0; }
+  .g-rule strong { display: block; font-size: 16px; font-weight: 600; letter-spacing: -.01em; }
+  .g-rule p { margin: 4px 0 0; color: var(--muted); font-size: 14px; }
+
+  /* Código inline copiable */
+  .g-cls { font: 500 12px/1.5 var(--mono); background: var(--surface-2); border-radius: 6px; padding: 2px 6px; cursor: pointer; overflow-wrap: anywhere; display: inline-block; }
+  .g-cls:hover { box-shadow: 0 0 0 1.5px var(--fg); }
+  .g-code-i { font: 500 12px/1.5 var(--mono); background: var(--surface-2); border-radius: 6px; padding: 1px 5px; }
+
+  /* Paleta */
+  .g-sw-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 235px), 1fr)); gap: 16px; }
+  .g-sw { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; min-width: 0; }
+  .g-sw-chip { height: 72px; display: flex; align-items: flex-end; padding: 8px 12px; font: 500 12px var(--mono); }
+  .g-sw-body { padding: 12px 14px 14px; display: grid; gap: 6px; }
+  .g-sw-body b { font-weight: 600; }
+  .g-sw-body span { color: var(--muted); font-size: 13px; }
+  .g-sw-hex { font: 500 12px var(--mono); color: var(--muted); }
+  .g-sw-cls { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  /* Filas de muestra: escenario + explicación */
+  .g-spec { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 20px 28px; padding-block: 22px; border-top: 1px solid var(--line); align-items: start; }
+  .g-spec:first-of-type { border-top: 0; padding-top: 0; }
+  .g-meta { display: grid; gap: 8px; min-width: 0; }
+  .g-meta h3 { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -.01em; }
+  .g-meta p { margin: 0; color: var(--muted); font-size: 14px; }
+  .g-meta .g-keys { display: flex; flex-wrap: wrap; gap: 6px; }
+  .g-pair { display: grid; gap: 10px; min-width: 0; }
+  @media (max-width: 860px) { .g-spec { grid-template-columns: minmax(0, 1fr); } }
+
+  /* Escenarios (imitan las superficies reales de la plantilla) */
+  .g-stage { border-radius: 14px; padding: 24px; overflow: auto; min-width: 0; font-size: 16px; line-height: 1.5; border: 1px solid var(--line); }
+  .g-stage.is-dark { background: var(--site-ink); color: #fff; }
+  .g-stage.is-mist { background: var(--site-mist); color: #111827; }
+  .g-stage.is-white { background: var(--site-white); color: #111827; }
+  .g-stage.is-flush { padding: 0; }
+  .g-stage * { min-width: 0; }
+
+  /* Tipografía */
+  .g-trow { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 260px); gap: 8px 24px; align-items: center; padding-block: 16px; border-top: 1px solid rgba(0,0,0,.09); }
+  .g-trow:first-child { border-top: 0; padding-top: 0; }
+  .g-trow:last-child { padding-bottom: 0; }
+  .g-tmeta { display: grid; gap: 4px; font-size: 13px; color: #4b5563; justify-items: start; }
+  @media (max-width: 700px) { .g-trow { grid-template-columns: minmax(0, 1fr); } }
+
+  /* Formas y espaciado */
+  .g-shapes { display: flex; flex-wrap: wrap; gap: 20px 28px; }
+  .g-shape { display: grid; gap: 8px; justify-items: start; }
+  .g-shape .box { width: 104px; height: 64px; background: #fff; border: 1px solid #e5e7eb; }
+  .g-shape small { color: #4b5563; font-size: 12px; }
+  .g-bars { display: grid; gap: 10px; }
+  .g-bar-row { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 12px; align-items: center; font-size: 13px; }
+  .g-bar-row .bar { height: 14px; border-radius: 4px; background: var(--fg); }
+  .g-bar-row span { color: var(--muted); }
+
+  /* Diagrama de la estructura de página */
+  .g-diagram { display: grid; grid-template-columns: minmax(0, 520px) minmax(0, 1fr); gap: 28px; align-items: start; }
+  .g-bands { display: grid; gap: 6px; }
+  .g-band { padding: 10px 14px; border-radius: 12px; font: 500 12px/1.4 var(--mono); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .g-band.dk { background: var(--site-ink); color: #fff; border: 1px solid var(--line); }
+  .g-band.mi { background: var(--site-mist); color: #111827; border: 1px solid var(--line); border-radius: 18px; }
+  .g-band.me { background: var(--accent); color: var(--accent-ink); padding-block: 22px; border-radius: 18px; font-weight: 600; }
+  .g-band small { opacity: .7; font-size: 11px; }
+  @media (max-width: 860px) { .g-diagram { grid-template-columns: minmax(0, 1fr); } }
+
+  /* Tablas */
+  .g-tw { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+  .g-table { width: 100%; min-width: 720px; border-collapse: collapse; font-size: 14px; }
+  .g-table th { text-align: left; font-size: 11.5px; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); background: var(--surface-2); padding: 10px 14px; font-weight: 600; white-space: nowrap; }
+  .g-table td { padding: 11px 14px; border-top: 1px solid var(--line); vertical-align: top; }
+  .g-table td:first-child { white-space: normal; }
+  .g-table tr.g-row:hover td { background: color-mix(in srgb, var(--surface-2) 55%, transparent); }
+  .g-table .sm { color: var(--muted); font-size: 13px; }
+  .g-table td.demo { min-width: 90px; }
+  .g-table td.demo .none { color: var(--muted); }
+
+  /* Controles de búsqueda y filtros */
+  .g-tools { display: grid; gap: 14px; margin-bottom: 20px; }
+  .g-search { width: 100%; max-width: 380px; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); font: inherit; }
+  .g-search::placeholder { color: var(--muted); }
+  .g-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .g-chip { padding: 6px 13px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--muted); font: 500 13px var(--font); cursor: pointer; }
+  .g-chip:hover { color: var(--fg); border-color: var(--fg); }
+  .g-chip[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+  .g-count { color: var(--muted); font-size: 13px; }
+
+  /* Cheat sheet */
+  .g-how { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 24px 32px; margin-bottom: 28px; }
+  .g-snips { display: grid; gap: 20px; }
+  .g-snip { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 20px; display: grid; gap: 14px; min-width: 0; }
+  .g-snip-h { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 12px; }
+  .g-snip-h h3 { margin: 0; font-size: 18px; font-weight: 600; letter-spacing: -.02em; }
+  .g-tag { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; }
+  .g-snip p { margin: 0; color: var(--muted); font-size: 14px; max-width: 80ch; }
+  .g-code-wrap { border-radius: 12px; overflow: hidden; background: var(--code-bg); border: 1px solid var(--code-line); min-width: 0; }
+  .g-code-bar { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 10px; border-bottom: 1px solid var(--code-line); }
+  .g-vbtns { display: flex; gap: 4px; }
+  .g-vbtn { padding: 4px 11px; border-radius: 8px; border: 0; background: transparent; color: #9aa0b0; font: 600 12px var(--font); cursor: pointer; }
+  .g-vbtn[aria-pressed="true"] { background: var(--code-btn); color: #fff; }
+  .g-copy { padding: 5px 12px; border-radius: 8px; border: 1px solid var(--code-line); background: var(--code-btn); color: #e4e6ec; font: 600 12px var(--font); cursor: pointer; }
+  .g-copy:hover { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .g-code { margin: 0; padding: 14px 16px; color: var(--code-fg); font: 400 12.5px/1.7 var(--mono); white-space: pre-wrap; overflow-wrap: anywhere; tab-size: 2; max-height: 460px; overflow: auto; }
+  .s-t { color: var(--syn-tag); } .s-a { color: var(--syn-attr); } .s-s { color: var(--syn-str); } .s-b { color: var(--syn-blade); } .s-c { color: var(--syn-com); }
+  .g-empty { padding: 40px 0; color: var(--muted); }
+
+  .g-toast { position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--fg); color: var(--bg); padding: 10px 16px; border-radius: 10px; font-size: 13px; font-weight: 500; z-index: 40; max-width: calc(100% - 32px); overflow-wrap: anywhere; opacity: 0; pointer-events: none; transition: opacity .15s; }
+  .g-toast.on { opacity: 1; }
+  .g-foot { padding-block: 40px 56px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--line); }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<header class="g-head">
+  <div class="g-wrap g-head-in">
+    <a class="g-brand" href="#guia"><span class="g-mark"></span><span>ePortfolio G3 <em>Estilos</em></span></a>
+    <nav class="g-tabs" aria-label="Secciones">
+      <a href="#guia" data-view="guia" class="g-tab">Guía de estilos</a>
+      <a href="#cheatsheet" data-view="cheatsheet" class="g-tab">Cheat sheet</a>
+      <a href="#clases" data-view="clases" class="g-tab">Clases útiles</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ======================= VISTA 1: GUÍA ======================= -->
+<main id="v-guia" class="g-view" data-view="guia" hidden>
+  <div class="g-wrap">
+    <div class="g-intro">
+      <h1>Un solo estilo para todo el ePortfolio</h1>
+      <p>La plantilla es SendIt, montada con Tailwind 4 y Bootstrap Icons. Esta guía fija lo que usamos en todas las páginas. Si necesitas algo que no está aquí, se añade aquí primero y después se usa en el código. Para copiar código, ve al <a href="#cheatsheet">cheat sheet</a>; para buscar una clase, a <a href="#clases">clases útiles</a>.</p>
+    </div>
+
+    <section class="g-sec">
+      <div class="g-sec-h"><h2>Reglas</h2></div>
+      <div class="g-rules">
+        <div class="g-rule"><strong>Solo clases de Tailwind</strong><p>Nada de <span class="g-code-i">style=""</span> ni CSS suelto dentro de las páginas.</p></div>
+        <div class="g-rule"><strong>Solo colores de la paleta</strong><p>El lima es para la acción principal de cada bloque. Nunca como color de texto sobre blanco.</p></div>
+        <div class="g-rule"><strong>Redondeo según el tamaño</strong><p><span class="g-code-i">rounded-xl</span> en botones, inputs y cards pequeñas; <span class="g-code-i">rounded-3xl</span> en cards grandes y secciones; <span class="g-code-i">rounded-full</span> en badges.</p></div>
+        <div class="g-rule"><strong>Reutiliza antes de crear</strong><p>Mira el cheat sheet antes de escribir clases nuevas. Si falta algo, se añade aquí primero y después se usa.</p></div>
+      </div>
+    </section>
+
+    <section class="g-sec">
+      <div class="g-sec-h"><h2>Paleta</h2><p>Haz clic en cualquier clase para copiarla. Los hex de los grises de Tailwind son orientativos.</p></div>
+      <div id="palette"></div>
+    </section>
+
+    <section class="g-sec">
+      <div class="g-sec-h"><h2>Tipografía</h2><p>Fuente del tema: <span class="g-code-i">font-sans</span> (Instrument Sans, cargada con Vite).</p></div>
+      <div class="g-stage is-white">
+        <div class="g-trow"><h1 class="text-5xl font-semibold tracking-tighter">Título de sección</h1><div class="g-tmeta"><code class="g-cls" data-copy>text-5xl font-semibold tracking-tighter</code><span>Hero y títulos de sección de portada</span></div></div>
+        <div class="g-trow"><h1 class="text-3xl font-bold text-gray-900">Título de página</h1><div class="g-tmeta"><code class="g-cls" data-copy>text-3xl font-bold text-gray-900</code><span>H1 de las páginas internas</span></div></div>
+        <div class="g-trow"><h2 class="text-xl font-bold text-gray-900">Título de tarjeta</h2><div class="g-tmeta"><code class="g-cls" data-copy>text-xl font-bold text-gray-900</code><span>H2 / H3 dentro de una card</span></div></div>
+        <div class="g-trow"><p class="text-base text-gray-900">Texto normal para párrafos importantes.</p><div class="g-tmeta"><code class="g-cls" data-copy>text-base text-gray-900</code><span>Cuerpo principal</span></div></div>
+        <div class="g-trow"><p class="text-sm leading-relaxed text-gray-600">Texto secundario: descripciones, párrafos de cards, ayudas largas.</p><div class="g-tmeta"><code class="g-cls" data-copy>text-sm leading-relaxed text-gray-600</code><span>Descripciones</span></div></div>
+        <div class="g-trow"><p class="text-xs text-gray-500">Texto auxiliar: pie de campo, fechas, notas.</p><div class="g-tmeta"><code class="g-cls" data-copy>text-xs text-gray-500</code><span>Ayudas y metadatos</span></div></div>
+        <div class="g-trow"><p class="text-xs font-semibold uppercase tracking-wider text-gray-500">Código · A-01</p><div class="g-tmeta"><code class="g-cls" data-copy>text-xs font-semibold uppercase tracking-wider text-gray-500</code><span>Etiqueta sobre un título</span></div></div>
+      </div>
+    </section>
+
+    <section class="g-sec">
+      <div class="g-sec-h"><h2>Botones y enlaces</h2><p>Un botón primario por bloque. El resto, secundarios. Los tamaños pequeño y grande solo cambian el padding y el texto.</p></div>
+      <div class="g-spec">
+        <div class="g-pair"><div data-snip="btn-primario"></div></div>
+        <div class="g-meta"><h3>Primario (lima)</h3><p>Guardar, crear, enviar. Texto negro siempre.</p><div class="g-keys"><code class="g-cls" data-copy>bg-[#cff245]</code><code class="g-cls" data-copy>text-black</code><code class="g-cls" data-copy>rounded-xl</code><code class="g-cls" data-copy>px-4 py-2 text-sm font-medium</code></div></div>
+      </div>
+      <div class="g-spec">
+        <div class="g-pair"><div data-snip="btn-secundario"></div></div>
+        <div class="g-meta"><h3>Secundario</h3><p>Volver, cancelar, acciones menos importantes. Una versión para fondo claro y otra para oscuro.</p><div class="g-keys"><code class="g-cls" data-copy>border border-gray-300 bg-white</code><code class="g-cls" data-copy>border border-gray-700 text-white</code></div></div>
+      </div>
+      <div class="g-spec">
+        <div class="g-pair"><div data-snip="btn-peligro"></div></div>
+        <div class="g-meta"><h3>Peligro</h3><p>Solo para borrar o acciones que no se pueden deshacer. Siempre con confirmación.</p><div class="g-keys"><code class="g-cls" data-copy>bg-red-600 text-white hover:bg-red-700</code></div></div>
+      </div>
+      <div class="g-spec">
+        <div class="g-pair"><div data-snip="enlaces"></div></div>
+        <div class="g-meta"><h3>Enlaces</h3><p>Sobre claro, gris 900 subrayado (no azul). Sobre oscuro, lima sin subrayar hasta el hover.</p><div class="g-keys"><code class="g-cls" data-copy>font-medium text-gray-900 underline underline-offset-4 hover:no-underline</code><code class="g-cls" data-copy>text-[#cff245] hover:underline</code></div></div>
+      </div>
+    </section>
+
+    <section class="g-sec">
+      <div class="g-sec-h"><h2>Etiquetas de estado</h2><p>Una sola variante para toda la web: píldora con anillo. El color depende del estado, nunca del gusto de quien programa la vista.</p></div>
+      <div class="g-spec">
+        <div class="g-pair"><div data-snip="badges"></div></div>
+        <div class="g-meta"><h3>Estados</h3><p>Verde: correcto. Amarillo: pendiente o aviso. Rojo: error. Azul: información. Gris: neutro.</p><div class="g-keys"><code class="g-cls" data-copy>inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset</code></div></div>
+      </div>
+    </section>
+
+    <section class="g-sec">
+      <div class="g-sec-h"><h2>Tarjetas</h2><p>Hay dos tamaños. Se apoyan siempre sobre el gris claro y son siempre blancas.</p></div>
+      <div class="g-spec">
+        <div class="g-pair"><div data-snip="card-compacta"></div></div>
+        <div class="g-meta"><h3>Compacta</h3><p>Elementos densos que se repiten mucho en una lista.</p><div class="g-keys"><code class="g-cls" data-copy>rounded-xl border border-gray-200 bg-white p-4 shadow-sm</code></div></div>
+      </div>
+      <div class="g-spec">
+        <div class="g-pair"><div data-snip="card-grande"></div></div>
+        <div class="g-meta"><h3>Grande, clicable</h3><p>Elementos con más contenido. Sube la sombra al pasar el ratón.</p><div class="g-keys"><code class="g-cls" data-copy>rounded-3xl border border-gray-200 bg-white p-8 shadow-sm hover:shadow-md</code></div></div>
+      </div>
+      <div class="g-spec">
+        <div class="g-pair"><div data-snip="card-detalle"></div></div>
+        <div class="g-meta"><h3>Detalle</h3><p>Página de un solo elemento. Datos en lista de definición y los botones abajo.</p><div class="g-keys"><code class="g-cls" data-copy>rounded-3xl border border-gray-200 bg-white p-8 shadow-sm</code></div></div>
+      </div>
+    </section>
+
+    <section class="g-sec">
+      <div class="g-sec-h"><h2>Formularios y avisos</h2></div>
+      <div class="g-spec">
+        <div class="g-pair"><div data-snip="campo"></div></div>
+        <div class="g-meta"><h3>Campo de texto</h3><p>Etiqueta arriba, ayuda o error debajo. El foco se marca con anillo lima.</p><div class="g-keys"><code class="g-cls" data-copy>rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm</code><code class="g-cls" data-copy>focus:ring-2 focus:ring-[#cff245]</code></div></div>
+      </div>
+      <div class="g-spec">
+        <div class="g-pair"><div data-snip="alertas"></div></div>
+        <div class="g-meta"><h3>Mensajes</h3><p>Confirmaciones y errores. Mismo patrón de color que las etiquetas: 50 de fondo, 800 de texto.</p><div class="g-keys"><code class="g-cls" data-copy>rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800</code></div></div>
+      </div>
+    </section>
+
+    <section class="g-sec">
+      <div class="g-sec-h"><h2>Formas, sombras y espacio</h2></div>
+      <div class="g-spec">
+        <div class="g-stage is-mist">
+          <div class="g-shapes">
+            <div class="g-shape"><div class="box rounded-xl"></div><code class="g-cls" data-copy>rounded-xl</code><small>Botones, inputs, cards compactas</small></div>
+            <div class="g-shape"><div class="box rounded-3xl"></div><code class="g-cls" data-copy>rounded-3xl</code><small>Cards grandes y secciones</small></div>
+            <div class="g-shape"><div class="box rounded-full" style="width:64px;height:64px"></div><code class="g-cls" data-copy>rounded-full</code><small>Etiquetas y avatares</small></div>
+          </div>
+        </div>
+        <div class="g-meta"><h3>Redondeo</h3><p>No se usan <span class="g-code-i">rounded</span> ni <span class="g-code-i">rounded-lg</span> sueltos. Si dudas, <span class="g-code-i">rounded-xl</span>.</p></div>
+      </div>
+      <div class="g-spec">
+        <div class="g-stage is-mist">
+          <div class="g-shapes">
+            <div class="g-shape"><div class="box rounded-xl shadow-sm"></div><code class="g-cls" data-copy>shadow-sm</code><small>Cards en reposo</small></div>
+            <div class="g-shape"><div class="box rounded-xl shadow-md"></div><code class="g-cls" data-copy>shadow-md</code><small>Hover de una card</small></div>
+            <div class="g-shape"><div class="box rounded-xl shadow-2xl"></div><code class="g-cls" data-copy>shadow-2xl</code><small>Modales e imagen principal</small></div>
+          </div>
+        </div>
+        <div class="g-meta"><h3>Sombras</h3><p>Sobre fondo oscuro no se usan sombras: se separa con borde <span class="g-code-i">border-gray-800</span>.</p></div>
+      </div>
+      <div class="g-spec">
+        <div class="g-bars">
+          <div class="g-bar-row"><code class="g-cls" data-copy>2</code><div class="bar" style="width:8px"></div></div>
+          <div class="g-bar-row"><code class="g-cls" data-copy>4</code><div class="bar" style="width:16px"></div></div>
+          <div class="g-bar-row"><code class="g-cls" data-copy>6</code><div class="bar" style="width:24px"></div></div>
+          <div class="g-bar-row"><code class="g-cls" data-copy>8</code><div class="bar" style="width:32px"></div></div>
+          <div class="g-bar-row"><code class="g-cls" data-copy>12</code><div class="bar" style="width:48px"></div></div>
+          <div class="g-bar-row"><code class="g-cls" data-copy>20</code><div class="bar" style="width:80px"></div></div>
+        </div>
+        <div class="g-meta"><h3>Escala de espacio</h3><p>Solo estos pasos en <span class="g-code-i">p-</span>, <span class="g-code-i">gap-</span> y <span class="g-code-i">mt-</span> (8, 16, 24, 32, 48 y 80 px). <span class="g-code-i">gap-4</span> entre elementos, <span class="g-code-i">p-8</span> dentro de una card grande, <span class="g-code-i">py-20</span> entre secciones.</p></div>
+      </div>
+    </section>
+
+    <section class="g-sec">
+      <div class="g-sec-h"><h2>Estructura de una página</h2><p>Las páginas se componen de bandas que alternan fondo oscuro y claro. Vuestro contenido va en una sección clara.</p></div>
+      <div class="g-diagram">
+        <div class="g-bands">
+          <div class="g-band dk"><span>cabecera</span><small>px-8 py-4 bg-[#0d0e11]</small></div>
+          <div class="g-band dk"><span>sección oscura</span><small>px-8 py-20 bg-[#0d0e11]</small></div>
+          <div class="g-band mi"><span>sección clara</span><small>bg-[#f6f7fa] rounded-3xl</small></div>
+          <div class="g-band me"><span>vuestra página</span><small>mx-auto max-w-5xl</small></div>
+          <div class="g-band dk"><span>sección oscura</span><small>px-8 py-20</small></div>
+          <div class="g-band dk"><span>pie</span><small>px-8 py-20</small></div>
+        </div>
+        <div class="g-meta">
+          <h3>Qué recordar</h3>
+          <p>Las secciones alternan negro y gris claro. Cada una usa <span class="g-code-i">px-8 py-20</span> y un contenedor <span class="g-code-i">mx-auto</span> con ancho máximo.</p>
+          <p>Dentro de vuestra página: <span class="g-code-i">max-w-4xl</span> para listados, <span class="g-code-i">max-w-3xl</span> para detalle y <span class="g-code-i">max-w-2xl</span> para formularios.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="g-sec">
+      <div class="g-sec-h"><h2>Iconos</h2><p>Bootstrap Icons, ya cargado en el layout. Se escriben como <span class="g-code-i">&lt;i class="bi bi-nombre"&gt;&lt;/i&gt;</span> y heredan color y tamaño del texto. En esta página los dibujos son aproximados.</p></div>
+      <div class="g-stage is-white"><div id="icons" class="flex flex-wrap gap-x-8 gap-y-5"></div></div>
+    </section>
+
+  </div>
+</main>
+
+<!-- ======================= VISTA 2: CHEAT SHEET ======================= -->
+<main id="v-cheatsheet" class="g-view" data-view="cheatsheet" hidden>
+  <div class="g-wrap">
+    <div class="g-intro">
+      <h1>Cheat sheet</h1>
+      <p>Bloques listos para copiar. Cada uno muestra cómo se ve y el código HTML con las clases de Tailwind, listo para pegar y adaptar.</p>
+    </div>
+    <div class="g-how">
+      <div class="g-rule"><strong>Copia el bloque</strong><p>Botón Copiar en la esquina del código.</p></div>
+      <div class="g-rule"><strong>Cambia solo lo tuyo</strong><p>Textos, enlaces y atributos <span class="g-code-i">name</span> e <span class="g-code-i">id</span>.</p></div>
+      <div class="g-rule"><strong>No toques el estilo</strong><p>Colores, redondeos y espaciados se dejan como están. Si falta algo, se añade aquí.</p></div>
+    </div>
+    <div class="g-tools">
+      <label for="snip-q" style="position:absolute;left:-9999px">Buscar bloque</label>
+      <input id="snip-q" class="g-search" type="search" placeholder="Buscar: botón, tabla, formulario…" autocomplete="off">
+      <div id="snip-chips" class="g-chips" role="group" aria-label="Categorías"></div>
+      <div id="snip-count" class="g-count"></div>
+    </div>
+    <div id="snips" class="g-snips"></div>
+    <div id="snip-empty" class="g-empty" hidden>No hay bloques con ese texto.</div>
+  </div>
+</main>
+
+<!-- ======================= VISTA 3: CLASES ======================= -->
+<main id="v-clases" class="g-view" data-view="clases" hidden>
+  <div class="g-wrap">
+    <div class="g-intro">
+      <h1>Clases útiles</h1>
+      <p>Las clases que ya usamos en el proyecto y las que vamos a necesitar. Haz clic en una fila para copiar la clase.</p>
+    </div>
+    <div class="g-tools">
+      <label for="cls-q" style="position:absolute;left:-9999px">Buscar clase</label>
+      <input id="cls-q" class="g-search" type="search" placeholder="Buscar: centrar, sombra, grid, hover…" autocomplete="off">
+      <div id="cls-chips" class="g-chips" role="group" aria-label="Categorías"></div>
+      <div id="cls-count" class="g-count"></div>
+    </div>
+    <div class="g-tw"><table class="g-table">
+      <thead><tr><th>Clase</th><th>Qué hace</th><th>Cuándo usarla</th><th>Vista</th></tr></thead>
+      <tbody id="cls-body"></tbody>
+    </table></div>
+    <p class="g-count" style="margin-top:14px">Breakpoints: <span class="g-code-i">sm:</span> desde 640 px, <span class="g-code-i">md:</span> 768 px, <span class="g-code-i">lg:</span> 1024 px, <span class="g-code-i">xl:</span> 1280 px. Se diseña primero para móvil y se añaden prefijos para pantallas mayores.</p>
+  </div>
+</main>
+
+<footer class="g-wrap g-foot">Guía de estilos del grupo 3. Si se decide un cambio, se actualiza aquí y se avisa al grupo.</footer>
+<div id="toast" class="g-toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var esc = function (s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); };
+
+  /* ---------- Constantes de estilo (una sola fuente de verdad) ---------- */
+  var BTN = 'inline-flex items-center justify-center gap-2 rounded-xl font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500';
+  var MD = 'px-4 py-2 text-sm', SM = 'px-3 py-1 text-xs', LG = 'px-6 py-3 text-base';
+  var C_PRI = 'bg-[#cff245] text-black hover:brightness-95';
+  var C_SECL = 'border border-gray-300 bg-white text-gray-900 hover:bg-gray-50';
+  var C_SECD = 'border border-gray-700 text-white hover:bg-white/5';
+  var C_DAN = 'bg-red-600 text-white hover:bg-red-700';
+  var PRI = BTN + ' ' + MD + ' ' + C_PRI, PRI_SM = BTN + ' ' + SM + ' ' + C_PRI, PRI_LG = BTN + ' ' + LG + ' ' + C_PRI;
+  var SECL = BTN + ' ' + MD + ' ' + C_SECL, SECD = BTN + ' ' + MD + ' ' + C_SECD, DAN = BTN + ' ' + MD + ' ' + C_DAN;
+  var BADGE = 'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium capitalize ring-1 ring-inset';
+  var B_GREEN = 'bg-green-100 text-green-800 ring-green-600/20', B_YEL = 'bg-yellow-100 text-yellow-800 ring-yellow-600/20',
+      B_RED = 'bg-red-100 text-red-800 ring-red-600/20', B_BLUE = 'bg-blue-100 text-blue-800 ring-blue-600/20',
+      B_GRAY = 'bg-gray-100 text-gray-800 ring-gray-500/10';
+  var INPUT = 'w-full rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-[#cff245]';
+  var CARD_S = 'rounded-xl border border-gray-200 bg-white p-4 text-gray-900 shadow-sm';
+  var CARD_L = 'rounded-3xl border border-gray-200 bg-white p-8 shadow-sm';
+  var LINK_L = 'font-medium text-gray-900 underline underline-offset-4 hover:no-underline';
+  var LINK_D = 'text-[#cff245] hover:underline';
+
+  /* ---------- Iconos aproximados para la vista previa ---------- */
+  var ST = ' fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"';
+  var ICONS = {
+    'star-fill': '<path d="M8 1.4l2 4.3 4.7.6-3.4 3.2.9 4.6L8 11.8l-4.2 2.3.9-4.6L1.3 6.3 6 5.7z"/>',
+    'send-fill': '<path d="M15 1L1 6.5l5 2 2 5z"/>',
+    'check-circle-fill': '<circle cx="8" cy="8" r="8"/><path d="M4.6 8.2l2.3 2.3 4.5-4.7" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>',
+    'arrow-right': '<path d="M2 8h11M9 4l4 4-4 4"' + ST + '/>',
+    'plus-lg': '<path d="M8 2v12M2 8h12"' + ST + '/>',
+    'x-lg': '<path d="M3 3l10 10M13 3L3 13"' + ST + '/>',
+    'pencil': '<path d="M11 2l3 3-8 8-3.5.6L3 10z"/>',
+    'trash': '<path d="M3 4h10l-1 10H4zM6 1.5h4V3H6z"/>',
+    'search': '<circle cx="7" cy="7" r="4.5"' + ST + '/><path d="M10.5 10.5L14 14"' + ST + '/>',
+    'person': '<circle cx="8" cy="5" r="3"/><path d="M2 14.5c0-3 2.5-5 6-5s6 2 6 5z"/>',
+    'house': '<path d="M8 1.5l7 6h-2V14H3V7.5H1z"/>',
+    'eye': '<path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"' + ST + '/><circle cx="8" cy="8" r="2"/>'
+  };
+  function icon(name, rest) {
+    var body = ICONS[name] || '<circle cx="8" cy="8" r="6"/>';
+    return '<svg viewBox="0 0 16 16" width="1em" height="1em" fill="currentColor" aria-hidden="true" class="' + (rest || '') + '" style="display:inline-block;vertical-align:-.125em;flex:none">' + body + '</svg>';
+  }
+  function withIcons(html) {
+    return html.replace(/<i class="bi bi-([\w-]+)([^"]*)"><\/i>/g, function (m, n, rest) { return icon(n, rest.trim()); });
+  }
+
+  /* ---------- Resaltado de sintaxis sencillo ---------- */
+  function hl(src) {
+    var s = esc(src);
+    return s.replace(/(&lt;!--[\s\S]*?--&gt;|\{\{--[\s\S]*?--\}\})|(\{\{[\s\S]*?\}\}|@(?:props|php|endphp|elseif|else|endif|if|foreach|endforeach|forelse|empty|endforelse|csrf|method|error|enderror|class|isset|endisset)\b)|(&lt;\/?[A-Za-z][\w:.-]*)|("[^"\n]*")|([A-Za-z:@.][\w:@.-]*)(?==)/g,
+      function (m, c, b, t, st, at) {
+        return c ? '<span class="s-c">' + c + '</span>' : b ? '<span class="s-b">' + b + '</span>' : t ? '<span class="s-t">' + t + '</span>' : st ? '<span class="s-s">' + st + '</span>' : '<span class="s-a">' + at + '</span>';
+      });
+  }
+
+  /* ---------- Copiar ---------- */
+  var toastEl = $('#toast'), toastT;
+  function toast(msg) {
+    toastEl.textContent = msg; toastEl.classList.add('on');
+    clearTimeout(toastT); toastT = setTimeout(function () { toastEl.classList.remove('on'); }, 1600);
+  }
+  function selectNode(n) {
+    try { var r = document.createRange(); r.selectNodeContents(n); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); } catch (e) {}
+  }
+  function copyText(text, node, label) {
+    var ok = function () { toast(label || 'Copiado'); };
+    var fail = function () { if (node) selectNode(node); toast('Selecciona y copia con Ctrl+C'); };
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text).then(ok, fail); }
+      else { fail(); }
+    } catch (e) { fail(); }
+  }
+  document.addEventListener('click', function (e) {
+    var el = e.target.closest ? e.target.closest('[data-copy]') : null;
+    if (el) { var t = el.getAttribute('data-copy') || el.textContent; copyText(t, el, 'Copiado: ' + (t.length > 46 ? t.slice(0, 46) + '…' : t)); }
+  });
+
+  /* ---------- Bloques del cheat sheet ---------- */
+  var SNIPS = [];
+  function S(id, cat, title, desc, stage, code, o) { o = o || {}; SNIPS.push({ id: id, cat: cat, title: title, desc: desc, stage: stage, code: code, html: o.html, blade: o.blade, flush: o.flush }); }
+
+  S('seccion-oscura', 'Estructura', 'Sección oscura', 'Fondo negro de marca con título, texto de apoyo y una acción. Va en portadas y bloques destacados.', 'dark',
+'<section class="bg-[#0d0e11] px-8 py-20">\n  <div class="mx-auto flex w-full max-w-5xl flex-col items-center gap-6 text-white">\n    <h2 class="text-center text-5xl font-semibold tracking-tighter">Título de la sección</h2>\n    <p class="max-w-xl text-center text-gray-400">Texto de apoyo breve que explica el bloque.</p>\n    <a href="#" class="' + PRI + '">Acción principal</a>\n  </div>\n</section>', { flush: true });
+
+  S('seccion-clara', 'Estructura', 'Sección clara', 'Gris claro con esquinas grandes. Las cards blancas se apoyan aquí.', 'dark',
+'<section class="rounded-3xl bg-[#f6f7fa] px-8 py-20">\n  <div class="mx-auto flex w-full max-w-5xl flex-col items-center gap-6">\n    <h2 class="text-center text-5xl font-semibold tracking-tighter text-gray-900">Título de la sección</h2>\n    <p class="max-w-xl text-center text-sm text-gray-600">Texto de apoyo breve que explica el bloque.</p>\n  </div>\n</section>', { flush: false });
+
+  S('contenedor', 'Estructura', 'Contenedor de página interna', 'Ancho máximo, centrado y con aire. Cambia max-w-4xl por 3xl (detalle) o 2xl (formulario).', 'mist',
+'<div class="mx-auto w-full max-w-4xl px-4 py-12">\n  <h1 class="mb-6 text-3xl font-bold text-gray-900">Título de la página</h1>\n\n  <div class="space-y-4">\n    <!-- tarjetas o contenido -->\n  </div>\n</div>',
+    { html: '<div class="mx-auto w-full max-w-4xl px-4 py-6"><h1 class="mb-6 text-3xl font-bold text-gray-900">Título de la página</h1><div class="space-y-4"><div class="h-14 rounded-xl border-2 border-dashed border-gray-300"></div><div class="h-14 rounded-xl border-2 border-dashed border-gray-300"></div></div></div>' });
+
+  S('cabecera', 'Estructura', 'Título de página con acción', 'Título a la izquierda y botón a la derecha. En móvil el botón baja a otra línea.', 'mist',
+'<div class="mb-6 flex flex-wrap items-center justify-between gap-4">\n  <h1 class="text-3xl font-bold text-gray-900">Título de la página</h1>\n  <a href="#" class="' + PRI + '"><i class="bi bi-plus-lg"></i> Añadir elemento</a>\n</div>');
+
+  S('grid', 'Estructura', 'Rejilla de tarjetas', 'Una columna en móvil, dos en tablet y tres en escritorio. Dentro de cada li va una tarjeta.', 'mist',
+'<ul class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">\n  <li><!-- tarjeta --></li>\n  <li><!-- tarjeta --></li>\n  <li><!-- tarjeta --></li>\n</ul>',
+    { html: '<ul class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"><li class="h-24 rounded-3xl border-2 border-dashed border-gray-300"></li><li class="h-24 rounded-3xl border-2 border-dashed border-gray-300"></li><li class="h-24 rounded-3xl border-2 border-dashed border-gray-300"></li></ul>' });
+
+  S('btn-primario', 'Botones', 'Botón primario', 'Lima con texto negro. Sirve para <a> y <button>. Tres tamaños y estado deshabilitado.', 'mist',
+'<!-- Normal -->\n<a href="#" class="' + PRI + '">Guardar</a>\n\n<!-- Pequeño -->\n<a href="#" class="' + PRI_SM + '">Guardar</a>\n\n<!-- Grande -->\n<a href="#" class="' + PRI_LG + '">Guardar</a>\n\n<!-- Deshabilitado -->\n<button type="button" disabled class="' + PRI + ' disabled:cursor-not-allowed disabled:opacity-50">Guardar</button>',
+    { html: '<div class="flex flex-wrap items-center gap-3"><a href="#" class="' + PRI + '">Guardar</a><a href="#" class="' + PRI_SM + '">Pequeño</a><a href="#" class="' + PRI_LG + '">Grande</a><button type="button" disabled class="' + PRI + ' disabled:cursor-not-allowed disabled:opacity-50">Deshabilitado</button></div>' });
+
+  S('btn-secundario', 'Botones', 'Botón secundario', 'Para volver, cancelar o acciones menos importantes. Versión para fondo claro y para fondo oscuro.', 'mist',
+'<!-- Sobre fondo claro -->\n<a href="#" class="' + SECL + '">Volver al listado</a>\n\n<!-- Sobre fondo oscuro -->\n<a href="#" class="' + SECD + '">Contacto</a>',
+    { html: '<div class="flex flex-col gap-4"><div><a href="#" class="' + SECL + '">Volver al listado</a></div><div class="rounded-xl bg-[#0d0e11] p-4"><a href="#" class="' + SECD + '">Contacto</a></div></div>' });
+
+  S('btn-peligro', 'Botones', 'Botón de peligro', 'Solo para eliminar. Combínalo con el modal de confirmación de más abajo.', 'mist',
+'<button type="submit" class="' + DAN + '"><i class="bi bi-trash"></i> Eliminar</button>');
+
+  S('enlaces', 'Botones', 'Enlaces de texto', 'En fondo claro, gris oscuro subrayado. En fondo oscuro, lima.', 'mist',
+'<!-- Sobre fondo claro -->\n<a href="#" class="' + LINK_L + '">Ver detalle →</a>\n\n<!-- Sobre fondo oscuro -->\n<a href="#" class="' + LINK_D + '">Ver detalle →</a>',
+    { html: '<div class="flex flex-col gap-4"><div><a href="#" class="' + LINK_L + '">Ver detalle →</a></div><div class="rounded-xl bg-[#0d0e11] p-4"><a href="#" class="' + LINK_D + '">Ver detalle →</a></div></div>' });
+
+  S('badges', 'Etiquetas', 'Etiquetas de estado', 'Cambia solo el color según el estado. El resto de clases no se toca.', 'mist',
+'<span class="' + BADGE + ' ' + B_GREEN + '">Correcto</span>\n<span class="' + BADGE + ' ' + B_YEL + '">Pendiente</span>\n<span class="' + BADGE + ' ' + B_RED + '">Error</span>\n<span class="' + BADGE + ' ' + B_BLUE + '">Info</span>\n<span class="' + BADGE + ' ' + B_GRAY + '">Neutro</span>',
+    { html: '<div class="flex flex-wrap items-center gap-2"><span class="' + BADGE + ' ' + B_GREEN + '">Correcto</span><span class="' + BADGE + ' ' + B_YEL + '">Pendiente</span><span class="' + BADGE + ' ' + B_RED + '">Error</span><span class="' + BADGE + ' ' + B_BLUE + '">Info</span><span class="' + BADGE + ' ' + B_GRAY + '">Neutro</span></div>' });
+
+  S('card-compacta', 'Tarjetas', 'Tarjeta compacta', 'Para listas densas. Cabe de tres en tres en escritorio.', 'mist',
+'<article class="flex flex-col justify-between gap-3 ' + CARD_S + '">\n  <div>\n    <span class="' + BADGE + ' ' + B_GREEN + '">Correcto</span>\n    <h2 class="mt-2 text-lg font-medium">Título de la tarjeta</h2>\n    <p class="mt-1 text-sm text-gray-600">Una línea de descripción.</p>\n  </div>\n  <a href="#" class="text-sm ' + LINK_L + '">Ver más →</a>\n</article>');
+
+  S('card-grande', 'Tarjetas', 'Tarjeta grande clicable', 'Toda la tarjeta es un enlace. Para elementos con más contenido.', 'mist',
+'<a href="#" class="flex h-full flex-col justify-between ' + CARD_L + ' transition hover:shadow-md">\n  <h3 class="text-2xl font-semibold leading-8 tracking-tight text-gray-900">Título de la tarjeta</h3>\n  <dl class="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2">\n    <div class="flex items-center gap-2">\n      <dt class="text-sm font-medium text-gray-500">Nivel</dt>\n      <dd class="' + BADGE + ' ' + B_BLUE + '">Alto</dd>\n    </div>\n    <div class="flex items-center gap-2">\n      <dt class="text-sm font-medium text-gray-500">Código</dt>\n      <dd class="' + BADGE + ' ' + B_GRAY + '">A-01</dd>\n    </div>\n  </dl>\n</a>');
+
+  S('card-detalle', 'Tarjetas', 'Tarjeta de detalle', 'Página de un solo elemento: datos en lista de definición y acciones abajo.', 'mist',
+'<div class="' + CARD_L + '">\n  <h2 class="text-2xl font-semibold tracking-tight text-gray-900">Título del elemento</h2>\n\n  <dl class="mt-6 grid gap-4 text-sm sm:grid-cols-2">\n    <div><dt class="font-medium text-gray-500">Código</dt><dd class="mt-1 text-gray-900">A-01</dd></div>\n    <div><dt class="font-medium text-gray-500">Horas</dt><dd class="mt-1 text-gray-900">200</dd></div>\n    <div><dt class="font-medium text-gray-500">Curso</dt><dd class="mt-1 text-gray-900">2025/26</dd></div>\n    <div><dt class="font-medium text-gray-500">Centro</dt><dd class="mt-1 text-gray-900">Centro de ejemplo</dd></div>\n  </dl>\n\n  <p class="mt-6 text-sm leading-relaxed text-gray-600">Descripción en dos o tres líneas.</p>\n\n  <div class="mt-8 flex flex-wrap gap-3">\n    <a href="#" class="' + PRI + '">Editar</a>\n    <a href="#" class="' + SECL + '">Volver</a>\n  </div>\n</div>');
+
+  S('campo', 'Formularios', 'Campo de texto', 'Etiqueta, campo y texto de ayuda. El mensaje de error se muestra solo cuando hay un fallo.', 'mist',
+'<div class="flex flex-col gap-1.5">\n  <label for="nombre" class="text-sm font-medium text-gray-900">Nombre</label>\n  <input id="nombre" name="nombre" type="text" placeholder="Escribe aquí" class="' + INPUT + '">\n  <p class="text-xs text-gray-500">Texto de ayuda opcional.</p>\n  <!-- Mensaje de error -->\n  <p class="text-xs text-red-600">Este campo es obligatorio.</p>\n</div>');
+
+  S('select-textarea', 'Formularios', 'Selector y área de texto', 'Mismo estilo que el campo de texto.', 'mist',
+'<div class="flex flex-col gap-1.5">\n  <label for="opcion" class="text-sm font-medium text-gray-900">Opción</label>\n  <select id="opcion" name="opcion" class="' + INPUT + '">\n    <option>Opción 1</option>\n    <option>Opción 2</option>\n    <option>Opción 3</option>\n  </select>\n</div>\n\n<div class="flex flex-col gap-1.5">\n  <label for="descripcion" class="text-sm font-medium text-gray-900">Descripción</label>\n  <textarea id="descripcion" name="descripcion" rows="4" class="' + INPUT + '"></textarea>\n</div>',
+    { html: '<div class="flex flex-col gap-4"><div class="flex flex-col gap-1.5"><label for="p-op" class="text-sm font-medium text-gray-900">Opción</label><select id="p-op" class="' + INPUT + '"><option>Opción 1</option><option>Opción 2</option><option>Opción 3</option></select></div><div class="flex flex-col gap-1.5"><label for="p-desc" class="text-sm font-medium text-gray-900">Descripción</label><textarea id="p-desc" rows="3" class="' + INPUT + '"></textarea></div></div>' });
+
+  S('formulario', 'Formularios', 'Formulario completo', 'Tarjeta de formulario con campos, botón primario y cancelar. Cambia el action por el vuestro.', 'mist',
+'<form action="#" method="post" class="mx-auto flex w-full max-w-2xl flex-col gap-6 ' + CARD_L + '">\n  <div class="flex flex-col gap-1.5">\n    <label for="nombre" class="text-sm font-medium text-gray-900">Nombre</label>\n    <input id="nombre" name="nombre" type="text" class="' + INPUT + '">\n  </div>\n\n  <div class="flex flex-col gap-1.5">\n    <label for="descripcion" class="text-sm font-medium text-gray-900">Descripción</label>\n    <textarea id="descripcion" name="descripcion" rows="4" class="' + INPUT + '"></textarea>\n  </div>\n\n  <div class="flex flex-wrap gap-3">\n    <button type="submit" class="' + PRI + '">Guardar</button>\n    <a href="#" class="' + SECL + '">Cancelar</a>\n  </div>\n</form>',
+    { html: '<form action="#" class="mx-auto flex w-full max-w-2xl flex-col gap-6 ' + CARD_L + '"><div class="flex flex-col gap-1.5"><label for="f-nombre" class="text-sm font-medium text-gray-900">Nombre</label><input id="f-nombre" type="text" class="' + INPUT + '"></div><div class="flex flex-col gap-1.5"><label for="f-desc" class="text-sm font-medium text-gray-900">Descripción</label><textarea id="f-desc" rows="3" class="' + INPUT + '"></textarea></div><div class="flex flex-wrap gap-3"><button type="submit" class="' + PRI + '">Guardar</button><a href="#" class="' + SECL + '">Cancelar</a></div></form>' });
+
+  S('form-oscuro', 'Formularios', 'Formulario en fila sobre fondo oscuro', 'Campo translúcido y botón lima, para secciones oscuras.', 'dark',
+'<form action="#" method="post" class="flex flex-wrap items-center gap-4">\n  <input name="email" type="email" placeholder="Introduce tu email" required class="rounded-xl border border-gray-700 bg-[#ebebeb]/5 px-4 py-1 text-white placeholder:text-gray-400 focus:border-[#cff245] focus:outline-none">\n  <input type="submit" value="Enviar" class="cursor-pointer rounded-xl bg-[#cff245] px-4 py-1 text-black hover:brightness-95">\n</form>');
+
+  S('alertas', 'Avisos', 'Mensajes de aviso', 'Éxito, error, aviso e información. Mismo patrón de color que las etiquetas.', 'mist',
+'<div role="status" class="rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800">Los cambios se han guardado.</div>\n<div role="alert" class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">No se ha podido guardar. Revisa los campos.</div>\n<div role="status" class="rounded-xl border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm text-yellow-800">Falta un paso por completar.</div>\n<div role="status" class="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">Puedes editar esto más adelante.</div>');
+
+  S('vacio', 'Avisos', 'Estado vacío', 'Para cuando una lista no tiene elementos. Dice qué falta y ofrece la acción para añadir el primero.', 'mist',
+'<div class="rounded-3xl border-2 border-dashed border-gray-300 px-8 py-12 text-center">\n  <p class="text-lg font-semibold text-gray-900">Todavía no hay elementos</p>\n  <p class="mt-1 text-sm text-gray-600">Cuando añadas el primero, aparecerá aquí.</p>\n  <a href="#" class="mt-6 ' + PRI + '">Añadir elemento</a>\n</div>');
+
+  S('modal', 'Avisos', 'Ventana modal (solo aspecto)', 'La capa oscura y la ventana blanca. Cómo se abre y se cierra lo decidís vosotros.', 'mist',
+'<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">\n  <div role="dialog" aria-modal="true" class="w-full max-w-md rounded-3xl bg-white p-8 shadow-2xl">\n    <h2 class="text-xl font-bold text-gray-900">¿Eliminar este elemento?</h2>\n    <p class="mt-2 text-sm text-gray-600">Esta acción no se puede deshacer.</p>\n\n    <div class="mt-8 flex flex-wrap justify-end gap-3">\n      <button type="button" class="' + SECL + '">Cancelar</button>\n      <button type="button" class="' + DAN + '">Eliminar</button>\n    </div>\n  </div>\n</div>',
+    { html: '<div class="relative h-72 overflow-hidden rounded-xl"><div class="absolute inset-0 flex items-center justify-center bg-black/60 p-4"><div class="w-full max-w-md rounded-3xl bg-white p-8 shadow-2xl"><h2 class="text-xl font-bold text-gray-900">¿Eliminar este elemento?</h2><p class="mt-2 text-sm text-gray-600">Esta acción no se puede deshacer.</p><div class="mt-8 flex flex-wrap justify-end gap-3"><button type="button" class="' + SECL + '">Cancelar</button><button type="button" class="' + DAN + '">Eliminar</button></div></div></div></div>' });
+
+  S('tabla', 'Datos', 'Tabla de datos', 'Con scroll horizontal en móvil, cabecera en gris y filas con separador.', 'mist',
+'<div class="overflow-x-auto rounded-xl border border-gray-200 bg-white">\n  <table class="w-full text-left text-sm">\n    <thead class="bg-gray-50 text-xs uppercase tracking-wider text-gray-500">\n      <tr>\n        <th class="px-4 py-3 font-medium">Código</th>\n        <th class="px-4 py-3 font-medium">Nombre</th>\n        <th class="px-4 py-3 font-medium">Nivel</th>\n        <th class="px-4 py-3 font-medium"><span class="sr-only">Acciones</span></th>\n      </tr>\n    </thead>\n    <tbody class="divide-y divide-gray-200">\n      <tr class="hover:bg-gray-50">\n        <td class="px-4 py-3 font-medium text-gray-900">A-01</td>\n        <td class="px-4 py-3 text-gray-600">Elemento de ejemplo</td>\n        <td class="px-4 py-3"><span class="' + BADGE + ' ' + B_BLUE + '">Alto</span></td>\n        <td class="px-4 py-3 text-right"><a href="#" class="' + LINK_L + '">Ver</a></td>\n      </tr>\n    </tbody>\n  </table>\n</div>',
+    { html: '<div class="overflow-x-auto rounded-xl border border-gray-200 bg-white"><table class="w-full text-left text-sm"><thead class="bg-gray-50 text-xs uppercase tracking-wider text-gray-500"><tr><th class="px-4 py-3 font-medium">Código</th><th class="px-4 py-3 font-medium">Nombre</th><th class="px-4 py-3 font-medium">Nivel</th><th class="px-4 py-3 font-medium"><span class="sr-only">Acciones</span></th></tr></thead><tbody class="divide-y divide-gray-200"><tr class="hover:bg-gray-50"><td class="px-4 py-3 font-medium text-gray-900">A-01</td><td class="px-4 py-3 text-gray-600">Elemento de ejemplo</td><td class="px-4 py-3"><span class="' + BADGE + ' ' + B_BLUE + '">Alto</span></td><td class="px-4 py-3 text-right"><a href="#" class="' + LINK_L + '">Ver</a></td></tr><tr class="hover:bg-gray-50"><td class="px-4 py-3 font-medium text-gray-900">A-02</td><td class="px-4 py-3 text-gray-600">Otro elemento de ejemplo</td><td class="px-4 py-3"><span class="' + BADGE + ' ' + B_GREEN + '">Medio</span></td><td class="px-4 py-3 text-right"><a href="#" class="' + LINK_L + '">Ver</a></td></tr></tbody></table></div>' });
+
+  S('lista-checks', 'Datos', 'Lista con iconos', 'Ventajas o requisitos. El icono no se encoge gracias a shrink-0.', 'mist',
+'<ul class="flex flex-col gap-2 text-sm text-gray-600">\n  <li class="flex items-start gap-3">\n    <i class="bi bi-check-circle-fill shrink-0 text-gray-900"></i>\n    <p>Acceso a todas las secciones</p>\n  </li>\n  <li class="flex items-start gap-3">\n    <i class="bi bi-check-circle-fill shrink-0 text-gray-900"></i>\n    <p>Soporte por correo</p>\n  </li>\n</ul>');
+
+  S('faq', 'Datos', 'Pregunta desplegable', 'Usa la etiqueta details, sin JavaScript.', 'mist',
+'<details>\n  <summary class="cursor-pointer text-base font-medium tracking-tight text-gray-900">¿Pregunta de ejemplo?</summary>\n  <p class="pt-4 text-sm text-gray-500">Respuesta de ejemplo en una o dos líneas.</p>\n</details>');
+
+  S('nav', 'Navegación', 'Enlaces de menú', 'Enlaces sobre fondo oscuro. El de la página actual va en blanco.', 'dark',
+'<nav class="flex flex-wrap items-center gap-6 text-sm">\n  <a href="#" class="text-gray-400 transition hover:text-white">Inicio</a>\n  <a href="#" class="text-gray-400 transition hover:text-white">Sección</a>\n  <a href="#" aria-current="page" class="text-white">Página actual</a>\n</nav>');
+
+  /* ---------- Render cheat sheet ---------- */
+  function stageHtml(sn) {
+    var inner = withIcons(sn.html || sn.code);
+    return '<div class="g-stage is-' + sn.stage + (sn.flush ? ' is-flush' : '') + '">' + inner + '</div>';
+  }
+  var snipsEl = $('#snips');
+  SNIPS.forEach(function (sn) {
+    var variants = [{ label: 'HTML', code: sn.code }];
+    if (sn.blade) variants.push({ label: 'Blade', code: sn.blade });
+    sn.variants = variants;
+    var art = document.createElement('article');
+    art.className = 'g-snip'; art.dataset.cat = sn.cat; art.dataset.text = (sn.title + ' ' + sn.desc + ' ' + sn.cat).toLowerCase();
+    art.innerHTML =
+      '<div class="g-snip-h"><h3>' + esc(sn.title) + '</h3><span class="g-tag">' + esc(sn.cat) + '</span></div>' +
+      '<p>' + esc(sn.desc) + '</p>' + stageHtml(sn) +
+      '<div class="g-code-wrap"><div class="g-code-bar"><div class="g-vbtns"></div><button class="g-copy">Copiar</button></div><pre class="g-code"></pre></div>';
+    var pre = $('pre', art), vb = $('.g-vbtns', art), cur = 0;
+    function show(i) {
+      cur = i; pre.innerHTML = hl(variants[i].code);
+      $$('button', vb).forEach(function (b, j) { b.setAttribute('aria-pressed', j === i ? 'true' : 'false'); });
+    }
+    variants.forEach(function (v, i) {
+      var b = document.createElement('button'); b.className = 'g-vbtn'; b.textContent = v.label;
+      b.addEventListener('click', function () { show(i); }); vb.appendChild(b);
+    });
+    $('.g-copy', art).addEventListener('click', function () { copyText(variants[cur].code, pre, 'Copiado: ' + sn.title); });
+    show(0);
+    snipsEl.appendChild(art);
+  });
+
+  var cats = ['Todos'].concat(SNIPS.map(function (s) { return s.cat; }).filter(function (c, i, a) { return a.indexOf(c) === i; }));
+  var snipCat = 'Todos';
+  function filterSnips() {
+    var q = $('#snip-q').value.trim().toLowerCase(), n = 0;
+    $$('.g-snip', snipsEl).forEach(function (a) {
+      var ok = (snipCat === 'Todos' || a.dataset.cat === snipCat) && (!q || a.dataset.text.indexOf(q) > -1);
+      a.hidden = !ok; if (ok) n++;
+    });
+    $('#snip-count').textContent = n + (n === 1 ? ' bloque' : ' bloques');
+    $('#snip-empty').hidden = n > 0;
+  }
+  function chips(target, list, getCur, setCur, after) {
+    target.innerHTML = '';
+    list.forEach(function (c) {
+      var b = document.createElement('button'); b.className = 'g-chip'; b.textContent = c;
+      b.addEventListener('click', function () { setCur(c); $$('.g-chip', target).forEach(function (x) { x.setAttribute('aria-pressed', x.textContent === c ? 'true' : 'false'); }); after(); });
+      b.setAttribute('aria-pressed', c === getCur() ? 'true' : 'false'); target.appendChild(b);
+    });
+  }
+  chips($('#snip-chips'), cats, function () { return snipCat; }, function (c) { snipCat = c; }, filterSnips);
+  $('#snip-q').addEventListener('input', filterSnips);
+  filterSnips();
+
+  /* ---------- Guía: muestras tomadas del cheat sheet ---------- */
+  $$('[data-snip]').forEach(function (el) {
+    var sn = SNIPS.filter(function (s) { return s.id === el.getAttribute('data-snip'); })[0];
+    if (sn) el.outerHTML = stageHtml(sn);
+  });
+
+  /* ---------- Paleta ---------- */
+  var PAL = [
+    ['Marca', [
+      ['Negro marca', '#0d0e11', 'bg-[#0d0e11]', 'text-white', 'Cabecera, pie y secciones oscuras. Texto encima en blanco.', 'text-white'],
+      ['Lima', '#cff245', 'bg-[#cff245]', 'text-black', 'Botón primario y acentos. Siempre con texto negro.', 'text-black'],
+      ['Gris claro', '#f6f7fa', 'bg-[#f6f7fa]', 'text-gray-900', 'Secciones claras. Es el suelo donde se apoyan las cards.', 'text-gray-900'],
+      ['Blanco', '#ffffff', 'bg-white', 'text-gray-900', 'Cards, inputs y tablas.', 'text-gray-900']]],
+    ['Texto', [
+      ['Gris 900', '#111827', 'bg-gray-900', 'text-gray-900', 'Títulos y texto principal sobre claro.', 'text-white'],
+      ['Gris 600', '#4b5563', 'bg-gray-600', 'text-gray-600', 'Párrafos y descripciones.', 'text-white'],
+      ['Gris 500', '#6b7280', 'bg-gray-500', 'text-gray-500', 'Etiquetas, ayudas y metadatos.', 'text-white'],
+      ['Gris 400', '#9ca3af', 'bg-gray-400', 'text-gray-400', 'Texto secundario sobre oscuro y placeholders.', 'text-black']]],
+    ['Bordes', [
+      ['Gris 200', '#e5e7eb', 'bg-gray-200', 'border-gray-200', 'Borde de cards y tablas sobre claro.', 'text-black'],
+      ['Gris 300', '#d1d5db', 'bg-gray-300', 'border-gray-300', 'Inputs y botones secundarios.', 'text-black'],
+      ['Gris 700', '#374151', 'bg-gray-700', 'border-gray-700', 'Inputs y botones sobre oscuro.', 'text-white'],
+      ['Gris 800', '#1f2937', 'bg-gray-800', 'border-gray-800', 'Separadores sobre oscuro, como bajo la cabecera.', 'text-white']]],
+    ['Estados', [
+      ['Verde', '100 / 800', 'bg-green-100', 'bg-green-100 text-green-800', 'Correcto, éxito.', 'text-green-800'],
+      ['Amarillo', '100 / 800', 'bg-yellow-100', 'bg-yellow-100 text-yellow-800', 'Pendiente, aviso.', 'text-yellow-800'],
+      ['Rojo', '100 / 800', 'bg-red-100', 'bg-red-100 text-red-800', 'Error. Botón de peligro: bg-red-600.', 'text-red-800'],
+      ['Azul', '100 / 800', 'bg-blue-100', 'bg-blue-100 text-blue-800', 'Información.', 'text-blue-800']]]
+  ];
+  $('#palette').innerHTML = PAL.map(function (g) {
+    return '<h3 class="g-sub">' + g[0] + '</h3><div class="g-sw-grid">' + g[1].map(function (s) {
+      return '<div class="g-sw"><div class="g-sw-chip ' + s[2] + ' ' + s[5] + '">Aa ' + esc(s[1].charAt(0) === '#' ? '' : '') + '</div><div class="g-sw-body"><b>' + s[0] + '</b><span class="g-sw-hex">' + s[1] + '</span><div class="g-sw-cls"><code class="g-cls" data-copy="' + s[3] + '">' + s[3] + '</code>' + (s[2] !== s[3] && s[3].indexOf('bg-') !== 0 ? '<code class="g-cls" data-copy="' + s[2] + '">' + s[2] + '</code>' : '') + '</div><span>' + s[4] + '</span></div></div>';
+    }).join('') + '</div>';
+  }).join('');
+
+  /* ---------- Iconos ---------- */
+  $('#icons').innerHTML = ['house', 'person', 'search', 'plus-lg', 'pencil', 'trash', 'eye', 'x-lg', 'arrow-right', 'star-fill', 'send-fill', 'check-circle-fill'].map(function (n) {
+    return '<button class="flex flex-col items-center gap-2 text-gray-900" data-copy="bi bi-' + n + '"><span class="text-3xl">' + icon(n) + '</span><code class="g-cls">bi-' + n + '</code></button>';
+  }).join('');
+
+  /* ---------- Tabla de clases ---------- */
+  var CL = [];
+  function K(cat, cls, que, uso, demo) { CL.push({ cat: cat, cls: cls, que: que, uso: uso, demo: demo }); }
+  var t = function (c) { return '<span class="' + c + '">Aa</span>'; };
+  var bg = function (c) { return '<span class="inline-block h-6 w-12 rounded-md border border-gray-300 ' + c + '"></span>'; };
+  var bx = function (c) { return '<span class="inline-block h-8 w-14 bg-white ' + c + '"></span>'; };
+  var dk = function (c) { return '<span class="rounded bg-[#0d0e11] px-2 py-0.5 ' + c + '">Aa</span>'; };
+
+  K('Estructura', 'mx-auto', 'margin-left y margin-right: auto', 'Centra un bloque que tiene ancho máximo. Siempre junto a un max-w-*.');
+  K('Estructura', 'max-w-7xl', 'max-width: 80rem (1280 px)', 'Contenedor de cabecera y pie.');
+  K('Estructura', 'max-w-5xl', 'max-width: 64rem (1024 px)', 'Contenido de las secciones de portada.');
+  K('Estructura', 'max-w-4xl', 'max-width: 56rem (896 px)', 'Listados y páginas internas.');
+  K('Estructura', 'max-w-3xl', 'max-width: 48rem (768 px)', 'Páginas de detalle.');
+  K('Estructura', 'max-w-2xl', 'max-width: 42rem (672 px)', 'Formularios y preguntas frecuentes.');
+  K('Estructura', 'w-full', 'width: 100%', 'Que un bloque ocupe todo el ancho disponible, junto a max-w-*.');
+  K('Estructura', 'h-full', 'height: 100%', 'Cards del mismo alto dentro de una rejilla.');
+  K('Estructura', 'min-h-screen', 'min-height: 100vh', 'Página que debe llenar la pantalla.');
+  K('Estructura', 'relative', 'position: relative', 'Contenedor de algo colocado con absolute.');
+  K('Estructura', 'absolute', 'position: absolute', 'Poner un elemento encima de otro: imagen decorativa, contador.');
+  K('Estructura', 'fixed inset-0', 'position: fixed y los cuatro lados a 0', 'Capa a pantalla completa para modales.');
+  K('Estructura', 'z-50', 'z-index: 50', 'Que el modal quede por encima del resto.');
+  K('Estructura', 'overflow-hidden', 'overflow: hidden', 'Recortar lo que sobresale, como una imagen en una card redondeada.');
+  K('Estructura', 'overflow-x-auto', 'overflow-x: auto', 'Tablas anchas con scroll horizontal en móvil.');
+  K('Estructura', 'hidden', 'display: none', 'Ocultar. Con prefijo: hidden md:flex oculta en móvil y muestra en tablet.');
+  K('Estructura', 'sr-only', 'Oculta visualmente, queda para lectores de pantalla', 'Texto accesible de botones solo con icono o cabeceras de columnas vacías.');
+
+  K('Flex y grid', 'flex', 'display: flex', 'Poner hijos en fila.');
+  K('Flex y grid', 'inline-flex', 'display: inline-flex', 'Botones y etiquetas con icono y texto.');
+  K('Flex y grid', 'flex-col', 'flex-direction: column', 'Apilar hijos en vertical.');
+  K('Flex y grid', 'flex-wrap', 'flex-wrap: wrap', 'Que los hijos bajen de línea en pantallas estrechas.');
+  K('Flex y grid', 'items-center', 'align-items: center', 'Centrar en vertical dentro de una fila.');
+  K('Flex y grid', 'items-start', 'align-items: flex-start', 'Alinear arriba, por ejemplo icono y párrafo.');
+  K('Flex y grid', 'justify-between', 'justify-content: space-between', 'Título a un lado y acción al otro.');
+  K('Flex y grid', 'justify-center', 'justify-content: center', 'Centrar en horizontal dentro de un flex.');
+  K('Flex y grid', 'gap-4', 'gap: 1rem (16 px)', 'Separación entre hijos de flex o grid. Escala: 2, 4, 6, 8.');
+  K('Flex y grid', 'flex-1', 'flex: 1 1 0%', 'Un hijo que se estira para ocupar lo que sobra.');
+  K('Flex y grid', 'shrink-0', 'flex-shrink: 0', 'Que un icono no se aplaste al faltar espacio.');
+  K('Flex y grid', 'ml-auto', 'margin-left: auto', 'Empujar un elemento al extremo derecho de una fila.');
+  K('Flex y grid', 'grid', 'display: grid', 'Rejillas de cards y formularios en columnas.');
+  K('Flex y grid', 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3', '1, 2 y 3 columnas según el ancho', 'Rejilla estándar de tarjetas.');
+  K('Flex y grid', 'col-span-2', 'grid-column: span 2', 'Un elemento que ocupa dos columnas de la rejilla.');
+
+  K('Espaciado', 'p-4', 'padding: 1rem (16 px)', 'Card compacta.');
+  K('Espaciado', 'p-8', 'padding: 2rem (32 px)', 'Card grande y paneles.');
+  K('Espaciado', 'px-4 py-2', 'padding horizontal 16 px, vertical 8 px', 'Botón normal y campos de formulario.');
+  K('Espaciado', 'px-8 py-20', 'padding horizontal 32 px, vertical 80 px', 'Sección de portada.');
+  K('Espaciado', 'py-12 px-4', 'padding vertical 48 px, horizontal 16 px', 'Contenedor de página interna.');
+  K('Espaciado', 'mt-4 / mb-6', 'margin-top 16 px / margin-bottom 24 px', 'Separaciones sueltas. Si hay varios hijos, mejor gap o space-y.');
+  K('Espaciado', 'space-y-4', 'margen de 16 px entre hijos verticales', 'Lista vertical sencilla de cards.');
+  K('Espaciado', 'divide-y divide-gray-200', 'línea gris entre hijos', 'Filas de tabla y listas con separador.');
+
+  K('Texto', 'text-xs', 'font-size: 12 px', 'Ayudas, fechas y etiquetas.', t('text-xs'));
+  K('Texto', 'text-sm', 'font-size: 14 px', 'Texto secundario, botones, campos.', t('text-sm'));
+  K('Texto', 'text-base', 'font-size: 16 px', 'Texto normal.', t('text-base'));
+  K('Texto', 'text-xl', 'font-size: 20 px', 'Título de card.', t('text-xl'));
+  K('Texto', 'text-3xl', 'font-size: 30 px', 'Título de página interna.', t('text-3xl'));
+  K('Texto', 'text-5xl', 'font-size: 48 px', 'Título de sección y hero.', t('text-5xl'));
+  K('Texto', 'font-medium', 'font-weight: 500', 'Botones, etiquetas, enlaces.', t('font-medium'));
+  K('Texto', 'font-semibold', 'font-weight: 600', 'Títulos grandes.', t('font-semibold'));
+  K('Texto', 'font-bold', 'font-weight: 700', 'Títulos de página y de card.', t('font-bold'));
+  K('Texto', 'tracking-tighter', 'letter-spacing: -0.05em', 'Titulares muy grandes, junto a font-semibold.', t('tracking-tighter text-2xl font-semibold'));
+  K('Texto', 'tracking-wider', 'letter-spacing: 0.05em', 'Etiquetas en mayúsculas.', t('tracking-wider uppercase text-xs font-semibold'));
+  K('Texto', 'uppercase', 'text-transform: uppercase', 'Etiquetas cortas y cabeceras de tabla.', t('uppercase text-xs'));
+  K('Texto', 'leading-relaxed', 'line-height: 1.625', 'Párrafos de varias líneas.');
+  K('Texto', 'text-center', 'text-align: center', 'Títulos y textos de portada.');
+  K('Texto', 'underline underline-offset-4', 'subrayado separado 4 px del texto', 'Enlaces sobre fondo claro.', t('underline underline-offset-4'));
+  K('Texto', 'truncate', 'una línea con puntos suspensivos', 'Títulos largos en cards compactas.');
+
+  K('Color', 'bg-[#0d0e11]', 'Fondo negro de marca', 'Cabecera, pie y secciones oscuras.', bg('bg-[#0d0e11]'));
+  K('Color', 'bg-[#cff245]', 'Fondo lima', 'Botón primario.', bg('bg-[#cff245]'));
+  K('Color', 'bg-[#f6f7fa]', 'Fondo gris claro', 'Secciones claras.', bg('bg-[#f6f7fa]'));
+  K('Color', 'bg-white', 'Fondo blanco', 'Cards, inputs y tablas.', bg('bg-white'));
+  K('Color', 'bg-gray-50', 'Fondo gris muy claro', 'Cabeceras de tabla y hover de filas.', bg('bg-gray-50'));
+  K('Color', 'bg-white/5', 'Blanco al 5 % de opacidad', 'Inputs y hover sobre fondo oscuro.', '<span class="inline-block h-6 w-12 rounded-md bg-[#0d0e11]"><span class="block h-6 w-12 rounded-md bg-white/5 ring-1 ring-white/20"></span></span>');
+  K('Color', 'text-white', 'Texto blanco', 'Texto sobre fondo oscuro.', dk('text-white'));
+  K('Color', 'text-black', 'Texto negro', 'Texto sobre el botón lima.', '<span class="rounded bg-[#cff245] px-2 py-0.5 text-black">Aa</span>');
+  K('Color', 'text-gray-900', 'Gris casi negro', 'Títulos y texto principal.', t('text-gray-900'));
+  K('Color', 'text-gray-600', 'Gris medio', 'Párrafos y descripciones.', t('text-gray-600'));
+  K('Color', 'text-gray-500', 'Gris suave', 'Etiquetas y ayudas.', t('text-gray-500'));
+  K('Color', 'text-gray-400', 'Gris claro', 'Texto secundario sobre oscuro.', dk('text-gray-400'));
+  K('Color', 'text-red-600', 'Rojo para errores', 'Mensaje de error bajo un campo.', t('text-red-600'));
+  K('Color', 'bg-green-100 text-green-800', 'Verde: fondo claro y texto oscuro', 'Estado correcto. Existen las mismas parejas en yellow, red y blue.', '<span class="rounded bg-green-100 px-2 py-0.5 text-green-800">Aa</span>');
+
+  K('Bordes y sombras', 'border', 'border-width: 1px', 'Siempre con color: border border-gray-200.', bx('border'));
+  K('Bordes y sombras', 'border-gray-200', 'Color de borde gris claro', 'Cards y tablas.', bx('border border-gray-200'));
+  K('Bordes y sombras', 'border-gray-300', 'Color de borde gris medio', 'Inputs y botones secundarios.', bx('border border-gray-300'));
+  K('Bordes y sombras', 'border-2 border-dashed', 'Borde de 2 px discontinuo', 'Estados vacíos.', bx('border-2 border-dashed border-gray-300'));
+  K('Bordes y sombras', 'rounded-xl', 'border-radius: 0.75rem (12 px)', 'Botones, inputs y cards compactas.', bx('rounded-xl border border-gray-300'));
+  K('Bordes y sombras', 'rounded-3xl', 'border-radius: 1.5rem (24 px)', 'Cards grandes y secciones.', bx('rounded-3xl border border-gray-300'));
+  K('Bordes y sombras', 'rounded-full', 'border-radius: 9999px', 'Etiquetas y avatares.', bx('rounded-full border border-gray-300'));
+  K('Bordes y sombras', 'ring-1 ring-inset ring-green-600/20', 'Anillo interior de 1 px, verde al 20 %', 'Contorno fino de las etiquetas de estado.', '<span class="rounded-full bg-green-100 px-2 py-0.5 text-xs text-green-800 ring-1 ring-inset ring-green-600/20">Aa</span>');
+  K('Bordes y sombras', 'shadow-sm', 'Sombra pequeña', 'Cards en reposo.', bx('rounded-xl shadow-sm'));
+  K('Bordes y sombras', 'shadow-md', 'Sombra media', 'Hover de una card.', bx('rounded-xl shadow-md'));
+  K('Bordes y sombras', 'shadow-2xl', 'Sombra muy grande', 'Modales e imagen principal.', bx('rounded-xl shadow-2xl'));
+
+  K('Estados', 'hover:brightness-95', 'Oscurece un 5 % al pasar el ratón', 'Botón primario lima.');
+  K('Estados', 'hover:bg-gray-50', 'Fondo gris muy claro al pasar el ratón', 'Botón secundario y filas de tabla.');
+  K('Estados', 'hover:underline', 'Subrayado al pasar el ratón', 'Enlaces lima sobre oscuro.');
+  K('Estados', 'hover:shadow-md', 'Sombra media al pasar el ratón', 'Cards clicables.');
+  K('Estados', 'focus:outline-none focus:ring-2', 'Quita el contorno del navegador y pone un anillo', 'Campos de formulario. Con focus:ring-[#cff245] el anillo es lima.');
+  K('Estados', 'focus-visible:ring-2', 'Anillo solo al navegar con teclado', 'Botones y enlaces.');
+  K('Estados', 'disabled:opacity-50 disabled:cursor-not-allowed', 'Atenuado y cursor prohibido si está deshabilitado', 'Botones deshabilitados.');
+  K('Estados', 'transition', 'Anima los cambios de color, sombra y opacidad', 'Junto a cualquier hover:.');
+  K('Estados', 'cursor-pointer', 'Cursor de mano', 'Elementos clicables que no son enlaces ni botones.');
+  K('Estados', 'placeholder:text-gray-400', 'Color del texto de ejemplo del input', 'Inputs.');
+
+  K('Responsive', 'sm:', 'Desde 640 px', 'sm:grid-cols-2 para dos columnas en tablet pequeña.');
+  K('Responsive', 'md:', 'Desde 768 px', 'md:flex-row, md:text-5xl, md:grid-cols-2.');
+  K('Responsive', 'lg:', 'Desde 1024 px', 'lg:grid-cols-3 para tres columnas en escritorio.');
+  K('Responsive', 'hidden md:flex', 'Oculto en móvil y flex desde 768 px', 'Menú de escritorio.');
+  K('Responsive', 'flex-col lg:flex-row', 'Apilado en móvil y en fila desde 1024 px', 'Bloques de texto e imagen.');
+  K('Responsive', 'text-4xl md:text-5xl', 'Título más pequeño en móvil', 'Titulares grandes que no caben en 400 px.');
+
+  K('Imagen', 'object-cover', 'object-fit: cover', 'Imagen que rellena su caja sin deformarse.');
+  K('Imagen', 'aspect-video', 'aspect-ratio: 16 / 9', 'Imágenes y miniaturas con proporción fija.');
+  K('Imagen', 'max-w-full h-auto', 'Nunca más ancha que su caja', 'Imágenes de contenido.');
+
+
+  var clsCats = ['Todas'].concat(CL.map(function (c) { return c.cat; }).filter(function (c, i, a) { return a.indexOf(c) === i; }));
+  var clsCat = 'Todas';
+  var body = $('#cls-body');
+  CL.forEach(function (c) {
+    var tr = document.createElement('tr'); tr.className = 'g-row'; tr.dataset.cat = c.cat;
+    tr.dataset.text = (c.cls + ' ' + c.que + ' ' + c.uso + ' ' + c.cat).toLowerCase();
+    tr.innerHTML = '<td><code class="g-cls" data-copy="' + esc(c.cls).replace(/"/g, '&quot;') + '">' + esc(c.cls) + '</code></td><td class="sm">' + esc(c.que) + '</td><td>' + esc(c.uso) + '</td><td class="demo">' + (c.demo ? c.demo : '<span class="none">—</span>') + '</td>';
+    body.appendChild(tr);
+  });
+  function filterCls() {
+    var q = $('#cls-q').value.trim().toLowerCase(), n = 0;
+    $$('tr', body).forEach(function (r) {
+      var ok = (clsCat === 'Todas' || r.dataset.cat === clsCat) && (!q || r.dataset.text.indexOf(q) > -1);
+      r.hidden = !ok; if (ok) n++;
+    });
+    $('#cls-count').textContent = n + (n === 1 ? ' clase' : ' clases');
+  }
+  chips($('#cls-chips'), clsCats, function () { return clsCat; }, function (c) { clsCat = c; }, filterCls);
+  $('#cls-q').addEventListener('input', filterCls);
+  filterCls();
+
+  /* ---------- Vistas por hash ---------- */
+  var views = $$('.g-view'), tabs = $$('.g-tab'), NAMES = views.map(function (v) { return v.dataset.view; });
+  function route() {
+    var h = (location.hash || '').slice(1);
+    if (NAMES.indexOf(h) < 0) h = 'guia';
+    views.forEach(function (v) { v.hidden = v.dataset.view !== h; });
+    tabs.forEach(function (a) { a.setAttribute('aria-current', a.dataset.view === h ? 'page' : 'false'); });
+    window.scrollTo(0, 0);
+  }
+  window.addEventListener('hashchange', route);
+  route();
+})();
+</script>
+
+</body></html>
